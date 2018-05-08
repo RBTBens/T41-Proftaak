@@ -2,8 +2,9 @@
 
 Node::Node()
 {
-  ControllerType type = IdentifySensor();
-  switch(type)
+  controllerType = IdentifySensor();
+  
+  switch (controllerType)
   {
     case NOT_DEFINED:
     {
@@ -52,6 +53,33 @@ ControllerType Node::IdentifySensor()
     }
     else
       return NOT_DEFINED;
+}
+
+int Node::GetIdentifier()
+{
+  switch (controllerType)
+  {
+    case TEMPERATURE:
+    {
+      return 0b001;
+      break;
+    }
+    case LIGHT:
+    {
+      return 0b010;
+      break;
+    }
+    case SOIL:
+    {
+      return 0b011;
+      break;
+    }
+    default:
+    {
+      return 0b00;
+      break;
+    }
+  }
 }
 
 bool Node::testLux()

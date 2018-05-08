@@ -11,12 +11,13 @@ class Node
 {
   public:
     Node(/*iCommunicationBus communication*/);
+    int GetIdentifier();
     void Regulate();
     float GetValue();
     //Communication things
   private:
     Controller* controller;
-    
+    ControllerType controllerType;
     ControllerType IdentifySensor();
     
     bool testTemp();

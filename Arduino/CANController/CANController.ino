@@ -1,17 +1,18 @@
 #include <CAN.h>
 #include "Node.h"
 
-#define NodeID 0b00000000111
 #define DEBUG true
+#define BIOSPHERE_ID 1
 
 Node* node;
+int nodeId = BIOSPHERE_ID << 2;
 
 // declared Variables
 //  bioSphere node
 //  000000000 00 = PI
 //            01 = Temperature
 //            10 = Light
-//            11 = Water
+//            11 = Soil
 
 void WriteWithID(int id , char message[], int messageSize)
 {
@@ -28,7 +29,7 @@ void WriteWithID(int id , char message[], int messageSize)
 
 void onReceive(int packetSize)  // received a packet
 {
-  if (CAN.packetId() == NodeID)
+  if (CAN.packetId() == nodeId)
   {
     Serial.print("Received ");
 
@@ -69,10 +70,16 @@ void onReceive(int packetSize)  // received a packet
 void setup()
 {
   Serial.begin(115200);
-  CAN.begin(500E3);
-  CAN.onReceive(onReceive); // register the receive callback
 
+  // Setup the CAN bus
+  CAN.begin(500E3);
+  CAN.onReceive(onReceive);
+
+  // Construct node and let it identify
   node = new Node();
+
+  // Assign ID to nodeId
+  nodeId = nodeId | node->GetIdentifier();
 }
 
 void loop()
@@ -88,5 +95,6 @@ void loop()
   WriteWithID(5, convertedString, textSize);
 
   // Serial.println(node->GetValue());
+
 }
 
