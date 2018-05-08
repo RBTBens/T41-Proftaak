@@ -80,6 +80,11 @@ void setup()
 
   // Assign ID to nodeId
   nodeId = nodeId | node->GetIdentifier();
+
+  // Announce ID
+  Serial.print("CAN Controller is ready (ID: ");
+  Serial.print(nodeId);
+  Serial.println(")");
 }
 
 void loop()

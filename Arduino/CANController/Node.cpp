@@ -8,6 +8,7 @@ Node::Node()
   {
     case NOT_DEFINED:
     {
+      Serial.println("Unable to identify controller type! Defaulting to Pi");
       break;
     }
     case TEMPERATURE:
