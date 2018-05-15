@@ -3,9 +3,14 @@
 
 #define DEBUG true
 #define BIOSPHERE_ID 1
+#define INTERVAL 1000
+
+#define TEXTSIZE 8
+#define DEFAULTID 0b00
 
 Node* node;
 int nodeId = BIOSPHERE_ID << 2;
+unsigned long previousMillis;
 
 // declared Variables
 //  bioSphere node
@@ -89,17 +94,19 @@ void setup()
 
 void loop()
 {
-  String stringetje = "tekst";
-  int textSize = stringetje.length() + 1;
-
-  // TODO: Check textSize length to be 8 at max
-
-  char convertedString[textSize];
-  stringetje.toCharArray(convertedString, textSize);
-
-  WriteWithID(5, convertedString, textSize);
-
-  // Serial.println(node->GetValue());
+  unsigned long currentMillis = millis();
+  if (currentMillis - previousMillis >= INTERVAL) {
+    previousMillis = currentMillis;
+    if (node->GetIdentifier() != DEFAULTID)
+    {
+      float result = node->GetValue();
+      String temp = String(result);
+      Serial.println(result);
+      char convertedString[TEXTSIZE];
+      temp.toCharArray(convertedString, TEXTSIZE);
+      WriteWithID(0, convertedString, TEXTSIZE);
+    }
+  }
 
 }
 
