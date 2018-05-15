@@ -13,7 +13,7 @@ class CanSerial:
 
 	# Constructor
 	def __init__(self, port):
-		self.ser.baudrate = 9600
+		self.ser.baudrate = 115200
 		self.ser.port = port
 		self.ser.timeout = 1
 		self.ser.open()
