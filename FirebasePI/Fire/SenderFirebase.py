@@ -16,6 +16,6 @@ class SenderFirebase:
         try:
             values["ActiveSchematic"] = result["ActiveSchematic"]
         except TypeError:
-            values["ActiveSchematic"] = "De standaard (besjes)"
+            values["ActiveSchematic"] = "bessen"
         res = self.fb.put('/Biosphere', str(ID), values)
         print(res)

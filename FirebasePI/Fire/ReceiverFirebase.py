@@ -17,3 +17,5 @@ class ReceiverFirebase:
     def get(self, ID):
         res = self.fb.get('/Biosphere/' + str(ID), None)
         return res
+
+    
