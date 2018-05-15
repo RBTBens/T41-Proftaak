@@ -10,14 +10,15 @@
 typedef struct
 {
   int    id;
-  String data;
+  char message[8];
+  int messageSize;
 } message_t;
 
 class CanSerial
 {
   public:
     void begin();
-    void write( int8_t id, String message );
+    void write( message_t message );
     message_t read();
   private:
     bool   msg_start;
