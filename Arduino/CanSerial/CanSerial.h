@@ -9,18 +9,18 @@
 
 typedef struct
 {
-  int    id;
-  char message[8];
-  int messageSize;
+    int  id;
+    char message[8];
+    int  messageSize;
 } message_t;
 
 class CanSerial
 {
-  public:
+public:
     void begin();
     void write( message_t message );
     message_t read();
-  private:
+private:
     bool   msg_start;
     bool   msg_valid;
     String msg;
