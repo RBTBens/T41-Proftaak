@@ -5,7 +5,7 @@
 #define BIOSPHERE_ID 1
 #define INTERVAL 1000
 
-#define TEXTSIZE 8
+#define TEXTSIZE 7
 #define DEFAULTID 0b00
 
 Node* node;
@@ -103,8 +103,8 @@ void loop()
     {
       float result = node->GetValue();
       String temp = String(result);
-      Serial.println(result);
-      char convertedString[TEXTSIZE];
+      Serial.println(temp);
+      char convertedString[TEXTSIZE] = { 0, };
       temp.toCharArray(convertedString, TEXTSIZE);
       WriteWithID(0, convertedString, TEXTSIZE);
     }
