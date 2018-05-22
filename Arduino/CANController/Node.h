@@ -27,7 +27,8 @@ class Node
     bool testSoil();
     bool testLux();
     bool testCo2();
-    
+
+    Soil soil;
     MHZ19 co2 = MHZ19(2, 3);
     Adafruit_BME280 temp;
     Adafruit_TSL2561_Unified lux = Adafruit_TSL2561_Unified( TSL2561_ADDR_FLOAT );

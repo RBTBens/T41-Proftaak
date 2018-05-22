@@ -1,9 +1,44 @@
 #ifndef SENSOR_H 
 #define SENSOR_H
+#define PUMPPIN 2
+#define HEATERPIN 3
+#define SOILPIN A0 
 
 #include "Adafruit_TSL2561_U.h"
 #include "Adafruit_BME280.h"
 #include "MHZ19.h"
+
+class iPump
+{
+  public:
+  ~iPump() {};
+  virtual void On() = 0;
+  virtual void Off() = 0;
+};
+
+class Pump : public iPump
+{
+  public:
+  Pump();
+  void On() override;
+  void Off() override;
+};
+
+class iHeater
+{
+  public:
+  ~iHeater() {};
+  virtual void On() = 0;
+  virtual void Off() = 0;
+};
+
+class Heater : public iHeater
+{
+  public:
+  Heater();
+  void On() override;
+  void Off() override; 
+};
 
 class iTemperature
 {

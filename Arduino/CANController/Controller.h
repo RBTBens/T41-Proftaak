@@ -24,6 +24,7 @@ class Controller
     void SetRecipe(Recipe rec) { recipe = rec; }
     Recipe GetRecipe() { return recipe; }
     ControllerType GetType() { return type; }
+    float desiredValue;
   private:
     Recipe recipe;
     ControllerType type;
@@ -32,28 +33,28 @@ class Controller
 class TemperatureController : public Controller
 {
   public: 
-  TemperatureController(/*iHeater heater, */iTemperature* temp);
+  TemperatureController(/*iHeater* heater,*/ iTemperature* temp);
   void Regulate();
   float GetValue();
   
   private:
   void On();
   void Off();
-  //iHeater heater;
+  iHeater* heater;
   iTemperature* temp;
   
 };
 class SoilController : public Controller
 {
   public: 
-  SoilController(/*iPump pump,*/ iSoil* soil);
+  SoilController(iPump* pump, iSoil* soil);
   void Regulate();
   float GetValue();
   
   private:
   void On();
   void Off();
-  //iPump pump;
+  iPump* pump;
   iSoil* soil;
   
 };

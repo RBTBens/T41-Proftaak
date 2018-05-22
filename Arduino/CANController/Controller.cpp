@@ -1,6 +1,6 @@
 #include "Controller.h"
 
-TemperatureController::TemperatureController(/*iHeater heater, */iTemperature* temp) : temp(temp)
+TemperatureController::TemperatureController(/*iHeater* heater,*/ iTemperature* temp) : temp(temp)
 {
   
 }
@@ -31,22 +31,24 @@ void TemperatureController::Off()
   //led.Off();
 }
 
-SoilController::SoilController(/*iPump pump,*/ iSoil* soil)
+SoilController::SoilController(iPump* pump, iSoil* soil)
 {
   this->soil = soil;
+  this->pump = pump;
 }
 
 void SoilController::Regulate()
 {
-  if (GetValue() > GetRecipe().DesiredLight)
-  {
-    On();
-  }
-  else if (GetValue() < GetRecipe().DesiredLight)
+  if (GetValue() > desiredValue)
   {
     Off();
   }
-  //ja
+  else if (GetValue() < desiredValue)
+  {
+    On();
+    delay(1000);
+    Off();
+  }
 }
 
 float SoilController::GetValue()
