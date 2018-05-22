@@ -15,7 +15,7 @@ class CanSerial:
 	def __init__(self, port):
 		self.ser.baudrate = 115200
 		self.ser.port = port
-		self.ser.timeout = 1
+		self.ser.timeout = 0.1
 		self.ser.open()
 		# Arduino reboots upon serial connection. Wait 5 seconds to startup
 		#self.time.sleep(5)
@@ -51,20 +51,23 @@ class CanSerial:
 		self.ser.close()
 # END CanSerial
 
-#serial = CanSerial('/dev/ttyACM0')
-serial = CanSerial('COM8')
+serial = CanSerial('/dev/ttyACM0')
+#serial = CanSerial('COM8')
 
 try:
 	while True:
-		id = input("ID: ")
-		msg = raw_input("Message: ")
-		serial.write(id, msg)
-		time.sleep(1)
+		# Write stuff here
+		# Example:
+		#id = input("ID: ")
+		#msg = raw_input("Message: ")
+		#serial.write(id, msg)
 		msg = serial.read();
-		print ""
-		print "Received:"
-		print "ID: " + msg[0] + " Data: " + msg[1]
-		print "" 
+		if msg is not None:
+			# Received complete message
+			print ""
+			print "Received:"
+			print "ID: " + msg[0] + " Data: " + msg[1]
+			print "" 
 except KeyboardInterrupt:
 	serial.close()
 	print '\n'
