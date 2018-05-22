@@ -13,9 +13,11 @@ class SenderFirebase:
 
     def post(self, ID, values):
         result = self.receiver.get(ID)
+        temp = {"ActiveSchematic" : 1}
         try:
-            values["ActiveSchematic"] = result["ActiveSchematic"]
-        except TypeError:
-            values["ActiveSchematic"] = "bessen"
-        res = self.fb.put('/Biosphere', str(ID), values)
+            temp["ActiveSchematic"] = result["ActiveSchematic"]
+        except KeyError:
+            temp["ActiveSchematic"] = "bessen"
+        self.fb.put('/Biosphere/', str(ID), temp)
+        res = self.fb.put('/Biosphere/' + str(ID), "CurrentValues", values)
         print(res)
