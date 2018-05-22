@@ -26,7 +26,7 @@ Node::Node()
     case SOIL:
     {
       Serial.println("Created Soil Controller");
-      controller = new SoilController();
+      controller = new SoilController(new Soil());
       break;
     }
   }
@@ -134,7 +134,20 @@ bool Node::testTemp()
 
 bool Node::testSoil()
 {
-  return false;
+  pinMode(A0, INPUT);
+  digitalWrite(A0, HIGH);
+
+  unsigned long now = millis();
+
+  while (millis() - now < SOIL_MEASURE_TIME)
+  {
+    if (analogRead(A0) > 1000)
+    {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 bool Node::testCo2()

@@ -31,9 +31,9 @@ void TemperatureController::Off()
   //led.Off();
 }
 
-SoilController::SoilController(/*iPump pump,*/ /*iSoil* soil*/)
+SoilController::SoilController(/*iPump pump,*/ iSoil* soil)
 {
-  
+  this->soil = soil;
 }
 
 void SoilController::Regulate()
