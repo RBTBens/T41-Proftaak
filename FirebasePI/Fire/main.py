@@ -3,7 +3,8 @@ from FirebaseCommunication import FirebaseCommunication
 
 communication = FirebaseCommunication()
 
-pollSchematicThread = Thread(target=communication.poll_schematic_update)
-pollSchematicThread.start()
+#pollSchematicThread = Thread(target=communication.poll_schematic_update)
+#pollSchematicThread.start()
 
-communication.update_current_values(21, {'Days': 8, 'Temp': 21, 'Gm': 80000, 'Hum': 5})
+updateValuesThread = Thread(target=communication.update_current_values)
+updateValuesThread.start()
