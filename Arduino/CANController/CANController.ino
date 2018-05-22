@@ -1,4 +1,4 @@
-#include <CAN.h>
+ #include <CAN.h>
 #include "Node.h"
 
 #define DEBUG true
@@ -21,9 +21,11 @@ unsigned long previousMillis;
 
 void WriteWithID(int id , char message[], int messageSize)
 {
-  if (messageSize < 9)
+  if (messageSize < 8)
   {
     CAN.beginPacket(id);
+    CAN.write((byte)nodeId);
+    
     for (int i = 0; i < messageSize; i++)
     {
       CAN.write(message[i]);

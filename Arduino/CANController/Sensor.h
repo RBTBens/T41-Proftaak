@@ -29,8 +29,10 @@ class iSoil
   virtual float GetValue() = 0;
 };
 
-class SOIL : public iSoil
+class Soil : public iSoil
 {
+  public:
+  Soil();
   float GetValue() override;
 };
 

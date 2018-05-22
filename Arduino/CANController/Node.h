@@ -7,6 +7,9 @@
 #include "Controller.h"
 #include "Sensor.h"
 
+#define SOIL_MEASURE_TIME 50
+#define SOIL_THRESHOLD 60
+
 class Node
 {
   public:

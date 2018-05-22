@@ -46,7 +46,7 @@ class TemperatureController : public Controller
 class SoilController : public Controller
 {
   public: 
-  SoilController(/*iPump pump,*/ /*iSoil* soil*/);
+  SoilController(/*iPump pump,*/ iSoil* soil);
   void Regulate();
   float GetValue();
   

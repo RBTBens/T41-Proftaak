@@ -11,10 +11,14 @@ float BME::GetValue()
   return bme.readTemperature();
 }
 
-float SOIL::GetValue()
+Soil::Soil()
 {
-  //Nog niet klaar.
-  return 0;
+  
+}
+
+float Soil::GetValue()
+{
+  return constrain(map(analogRead(A0), 850, 1000, 100, 0), 0, 100);
 }
 
 TSL::TSL(Adafruit_TSL2561_Unified tsl) : tsl(tsl)
