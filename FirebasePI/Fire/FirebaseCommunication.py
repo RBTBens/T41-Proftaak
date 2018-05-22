@@ -11,7 +11,7 @@ class FirebaseCommunication:
     sender = SenderFirebase()
 
     #serial = CanSerial("/dev/ttyACM0")
-    serial = CanSerial("COM10")
+    serial = CanSerial("COM14")
 
     currentValues = None
 
@@ -52,7 +52,6 @@ class FirebaseCommunication:
     def update_current_values(self):
         while True:
             msg = self.serial.read()
-            print("ahhasodijfoaisjtueu")
             if msg is not None:
                 print("")
                 print("Received:")
@@ -65,7 +64,8 @@ class FirebaseCommunication:
                 print('\n')
                 print(biosphereNumber)
                 print('\n')
-                value = "{'" + self.switch(controllerType) + "':" + msg[0] + "}"
+                value = (self.switch(controllerType), msg[1])
+                print(value)
                 self.sender.post(biosphereNumber, value)
 
     def switch(self, x):

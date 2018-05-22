@@ -18,6 +18,7 @@ class SenderFirebase:
             temp["ActiveSchematic"] = result["ActiveSchematic"]
         except KeyError:
             temp["ActiveSchematic"] = "bessen"
+        result[values[0]] = values[1]
         self.fb.put('/Biosphere/', str(ID), temp)
-        res = self.fb.put('/Biosphere/' + str(ID), "CurrentValues", values)
+        res = self.fb.put('/Biosphere/' + str(ID), "CurrentValues", str(result))
         print(res)
