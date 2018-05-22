@@ -17,9 +17,9 @@ void CanSerial::write( message_t message )
     if ( message.messageSize < 9 )
     {
         String msg = "#";
-        msg += message.id;
+        msg += message.message[0];
         msg += ":";
-        for ( int i = 0; i < message.messageSize; i++ )
+        for ( int i = 1; i < message.messageSize; i++ )
         {
             msg += message.message[i];
         }
