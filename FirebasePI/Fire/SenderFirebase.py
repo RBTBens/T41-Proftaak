@@ -11,14 +11,39 @@ class SenderFirebase:
     def __init__(self):
         self.fb = firebase.FirebaseApplication(self.fireURL, None)
 
-    def post(self, ID, values):
-        result = self.receiver.get(ID)
-        temp = {"ActiveSchematic" : 1}
+    def post_unkown_schematic(self, ID, values):
+        current = None
         try:
-            temp["ActiveSchematic"] = result["ActiveSchematic"]
-        except KeyError:
-            temp["ActiveSchematic"] = "bessen"
-        result[values[0]] = values[1]
+            current = self.receiver.get(ID)["CurrentValues"]
+        except:
+            current = {"CO2":1,"lux":1,"groundMoisture":1, "temperature":1}
+        temp = {"ActiveSchematic":1}
+        test = self.receiver.get(ID)
+        temp["ActiveSchematic"] = "bessen"
         self.fb.put('/Biosphere/', str(ID), temp)
-        res = self.fb.put('/Biosphere/' + str(ID), "CurrentValues", str(result))
+        try:
+            current[values[0]] = values[1]
+        except TypeError:
+            pass
+        res = self.fb.put('/Biosphere/' + str(ID), "CurrentValues", current)
+
+    def post(self, ID, values):
+        current = None
+        try:
+            current = self.receiver.get(ID)["CurrentValues"]
+        except:
+            current = {"CO2":1,"lux":1,"groundMoisture":1, "temperature":1}
+        temp = {"ActiveSchematic":1}
+        test = self.receiver.get(ID)
+        try:
+            temp["ActiveSchematic"] = test["ActiveSchematic"]
+        except TypeError:
+            temp["ActiveSchematic"] = "bessen"
+        self.fb.put('/Biosphere/', str(ID), temp)
+        try:
+            current[values[0]] = values[1]
+        except TypeError:
+            pass
+        res = self.fb.put('/Biosphere/' + str(ID), "CurrentValues", current)
+
         print(res)

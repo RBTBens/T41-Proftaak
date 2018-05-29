@@ -29,7 +29,7 @@ class CanSerial:
         msg += message
         msg += ';'
         if self.ser.is_open:
-            self.ser.write(msg)
+            self.ser.write(msg.encode('utf-8'))
 
     def read(self):
         while self.ser.in_waiting > 0:

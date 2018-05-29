@@ -10,44 +10,37 @@ class FirebaseCommunication:
     receiver = ReceiverFirebase()
     sender = SenderFirebase()
 
-    #serial = CanSerial("/dev/ttyACM0")
-    serial = CanSerial("COM14")
+    serial = CanSerial("/dev/ttyUSB1")
 
     currentValues = None
 
     def __init__(self):
-        self.currentValues = self.receiver.get_all()
+        self.currentValues = list(self.receiver.get_all())
 
     def poll_schematic_update(self):
         while(1):
-            time.sleep(5)
-            temp = self.receiver.get_all()
-            i = 0
-            if temp != self.currentValues:
-                for key in temp:
 
-                    print(key)
+            print("hallo")
+            temp = list(self.receiver.get_all())
+            for i in range(0, temp.__len__()):
+                if isinstance(temp[i], dict):
+                    newValue = temp[i]
                     try:
-                        if key is None:
-                            pass
-                        else:
-                            if key != self.currentValues[i]:
-                                print(key)
-                                #TODO Serial post new schematic
-                                #serial.post(key)
-
-                                self.serial.write(id=self.bak, message=key)
-                                time.sleep(1)
+                        oldValue = self.currentValues[i]
                     except IndexError:
-                        #TODO Alsnog posten via serial want is out of bounds geweest
-                        #serial.post(key)
-                        self.serial.write(id=self.bak, message=key)
-                        time.sleep(1)
-                        print(key)
-                    i = i + 1
-                self.currentValues = temp
-            else:
-                print("Nothing new")
+                        oldValue = {}
+                    if newValue != oldValue:
+                        schematic = temp[i]["ActiveSchematic"]
+                        schematicValues = self.receiver.get_schematic(schematic)
+                        if schematicValues is None:
+                            print("Unkown Schematic")
+                            self.sender.post_unkown_schematic(i, schematicValues)
+                        else:
+                            print("Uploading")
+                            self.currentValues = list(self.receiver.get_all())
+                            self.upload_schematics(schematicValues)
+                elif temp[i] is not None:
+                    self.add_new_biosphere(i)
 
     def update_current_values(self):
         while True:
@@ -60,13 +53,12 @@ class FirebaseCommunication:
                 data = int(msg[0])
                 controllerType = data & 0b11
                 biosphereNumber = (data & 0b11111100) >> 2
-                print(controllerType)
-                print('\n')
-                print(biosphereNumber)
-                print('\n')
-                value = (self.switch(controllerType), msg[1])
+                value = (self.switch(controllerType), float(msg[1][:msg[1].index('\x00')]))
                 print(value)
                 self.sender.post(biosphereNumber, value)
+
+    def add_new_biosphere(self, ID):
+        self.sender.post(ID, None)
 
     def switch(self, x):
         return {
@@ -75,3 +67,8 @@ class FirebaseCommunication:
             2: "lux",
             3: "groundMoisture"
         }.get(x, 0)
+
+    def upload_schematics(self, values):
+        self.serial.write(id=1, message=str(values["temperature"]))
+        self.serial.write(id=2, message=str(values["lux"]))
+        self.serial.write(id=3, message=str(values["groundMoisture"]))

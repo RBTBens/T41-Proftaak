@@ -18,4 +18,10 @@ class ReceiverFirebase:
         res = self.fb.get('/Biosphere/' + str(ID), None)
         return res
 
-    
+    def get_schematic(self, schematicname):
+        res = None
+        try:
+            res = self.fb.get('/Schematics/' + schematicname, None)["values"]
+        except:
+            pass
+        return res
