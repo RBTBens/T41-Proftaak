@@ -1,21 +1,35 @@
 #include "Controller.h"
 
+
+
+
+
 TemperatureController::TemperatureController(/*iHeater* heater,*/ iTemperature* temp) : temp(temp)
 {
-  
+  float Kp = 1.1, Ki = 0.4, Kd = 0.1, Hz = 10;
+  int output_bits = 8;
+  bool output_signed = false;
+  myPID = FastPID(Kp, Ki, Kd, Hz, output_bits, output_signed);
+
 }
 
 void TemperatureController::Regulate()
 {
-  if (GetValue() > GetRecipe().DesiredLight)
+
+
+  desiredValue = 40; // set to the new desired value // 40 is for testing
+  int setpoint = desiredValue; //write new desired value into this
+  int feedback = temp->GetValue();
+  for (int i = 0; i < 30; i++)
   {
-    On();
+    uint8_t output = myPID.step(setpoint, feedback);
+    // write output over PIN
+    
+   
+    analogWrite(HEATERPIN, 255 - output);
   }
-  else if (GetValue() < GetRecipe().DesiredLight)
-  {
-    Off();
-  }
-  //ja
+  Serial.print("temp: ");
+  Serial.println(feedback);
 }
 
 float TemperatureController::GetValue()
@@ -74,7 +88,7 @@ void SoilController::Off()
 
 LightController::LightController(/*iLED led,*/iLDR* ldr) : ldr(ldr)
 {
-  
+
 }
 
 void LightController::Regulate()

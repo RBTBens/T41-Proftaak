@@ -2,7 +2,7 @@
 
 Heater::Heater()
 {
-
+  pinMode(HEATERPIN, OUTPUT);
 }
 
 void Heater::On()

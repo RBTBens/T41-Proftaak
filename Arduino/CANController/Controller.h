@@ -2,6 +2,7 @@
 #define CONTROLLER_H
 
 #include "Sensor.h"
+#include <FastPID.h>
 
 #define PUMP_SINGLE_SUPPLY 10
 #define PUMP_DELAY 60000
@@ -41,10 +42,12 @@ class TemperatureController : public Controller
   float GetValue();
   
   private:
+  FastPID myPID;
   void On();
   void Off();
   iHeater* heater;
   iTemperature* temp;
+  int desiredValue;
   
 };
 class SoilController : public Controller
