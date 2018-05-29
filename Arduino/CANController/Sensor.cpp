@@ -17,7 +17,8 @@ void Heater::Off()
 
 Pump::Pump()
 {
-  
+  pinMode(PUMPPIN, OUTPUT);
+  digitalWrite(PUMPPIN, LOW);
 }
 
 void Pump::On()
@@ -34,6 +35,10 @@ void Pump::Off()
 void Pump::Supply(float ml)
 {
   float ms = (ml / rate) * 1000.0f;
+  Serial.print("Supply ");
+  Serial.print(ml);
+  Serial.print(" ml - ms: ");
+  Serial.println(ms);
   On();
   endTime = millis() + (unsigned long)ms;
 }
@@ -64,8 +69,18 @@ Soil::Soil()
 
 float Soil::GetValue()
 {
-  pinMode(SOILPIN, INPUT);
-  digitalWrite(SOILPIN, HIGH);
+  if (!pinEnabled)
+  {
+    pinMode(SOILPIN, INPUT);
+    digitalWrite(SOILPIN, HIGH);
+    pinEnabled = true;
+    Serial.println("Enabled pin");
+    for (int i = 0; i < SOIL_STARTUP; i++)
+    {
+      GetValue();
+      delay(100);
+    }
+  }
 
   float value = analogRead(SOILPIN);
   if (value > 1000)
@@ -73,7 +88,7 @@ float Soil::GetValue()
     return -1;
   }
 
-  return constrain(map(value, 300, 600, 100, 0), 0, 100);
+  return constrain(map(value, 300, 800, 100, 0), 0, 100);
 }
 
 TSL::TSL(Adafruit_TSL2561_Unified tsl) : tsl(tsl)

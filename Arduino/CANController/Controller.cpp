@@ -31,22 +31,25 @@ void TemperatureController::Off()
   //led.Off();
 }
 
-SoilController::SoilController(iPump* pump, iSoil* soil)
+SoilController::SoilController(iPump* pump, iSoil* soil): pump(pump)
 {
   this->soil = soil;
-  this->pump = pump;
+ // this->pump = pump;
 }
 
 void SoilController::Regulate()
 {
+  Serial.println("Soil::Regulate()");
+  
   // For tracking exact pumpee
   pump->Regulate();
-  
-  if (GetValue() > desiredValue)
+
+  float value = GetValue();
+  if (value > desiredValue)
   {
     Off();
   }
-  else if (GetValue() < desiredValue)
+  else if (value < desiredValue)
   {
     On();
   }

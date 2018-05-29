@@ -26,7 +26,7 @@ Node::Node()
     case SOIL:
     {
       Serial.println("Created Soil Controller");
-      controller = new SoilController(new Pump(), new Soil());
+      controller = new SoilController(new Pump(), soil);
       break;
     }
   }
@@ -53,7 +53,9 @@ ControllerType Node::IdentifySensor()
       return SOIL;
     }
     else
+    {
       return NOT_DEFINED;
+    }
 }
 
 int Node::GetIdentifier()
@@ -114,7 +116,13 @@ bool Node::testTemp()
 
 bool Node::testSoil()
 {
-  return soil.GetValue() < 1000;
+  if (soil == NULL)
+  {
+    soil = new Soil();
+  }
+  
+  float value = soil->GetValue();
+  return value >= 0 && value < 1000;
 }
 
 bool Node::testCo2()
@@ -124,6 +132,7 @@ bool Node::testCo2()
 
 void Node::Regulate()
 {
+  Serial.println("Node::Regulate()");
   controller->Regulate();
 }
 

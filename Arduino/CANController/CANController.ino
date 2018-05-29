@@ -77,6 +77,8 @@ void onReceive(int packetSize)  // received a packet
 void setup()
 {
   Serial.begin(115200);
+  while (!Serial) {}
+  Serial.println("Serial ready");
 
   // Setup the CAN bus
   CAN.begin(500E3);

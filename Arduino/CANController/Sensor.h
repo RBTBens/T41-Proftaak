@@ -1,8 +1,9 @@
 #ifndef SENSOR_H 
 #define SENSOR_H
-#define PUMPPIN 2
+#define PUMPPIN 4
 #define HEATERPIN 3
 #define SOILPIN A0
+#define SOIL_STARTUP 3
 
 #include "Adafruit_TSL2561_U.h"
 #include "Adafruit_BME280.h"
@@ -77,6 +78,9 @@ class Soil : public iSoil
   public:
   Soil();
   float GetValue() override;
+
+  private:
+  bool pinEnabled = false;
 };
 
 class iLDR

@@ -21,12 +21,12 @@ class Controller
   };
   
   public:
-    void Regulate(){};
+    virtual void Regulate()=0;
     virtual float GetValue() = 0;
     void SetRecipe(Recipe rec) { recipe = rec; }
     Recipe GetRecipe() { return recipe; }
     ControllerType GetType() { return type; }
-    float desiredValue;
+    float desiredValue = 66;
   private:
     Recipe recipe;
     ControllerType type;
