@@ -39,6 +39,9 @@ SoilController::SoilController(iPump* pump, iSoil* soil)
 
 void SoilController::Regulate()
 {
+  // For tracking exact pumpee
+  pump->Regulate();
+  
   if (GetValue() > desiredValue)
   {
     Off();
@@ -46,8 +49,6 @@ void SoilController::Regulate()
   else if (GetValue() < desiredValue)
   {
     On();
-    delay(1000);
-    Off();
   }
 }
 
@@ -57,11 +58,11 @@ float SoilController::GetValue()
 }
 void SoilController::On()
 {
-  //led.On();
+  pump->Supply(PUMP_SINGLE_SUPPLY);
 }
 void SoilController::Off()
 {
-  //led.Off();
+  pump->Off();
 }
 
 

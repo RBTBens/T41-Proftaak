@@ -97,16 +97,23 @@ void setup()
 void loop()
 {
   unsigned long currentMillis = millis();
-  if (currentMillis - previousMillis >= INTERVAL) {
+  if (currentMillis - previousMillis >= INTERVAL)
+  {
     previousMillis = currentMillis;
+
+    // Check if we're not the Pi
     if (node->GetIdentifier() != DEFAULTID)
     {
+      // Get current value and post that
       float result = node->GetValue();
       String temp = String(result);
       Serial.println(temp);
       char convertedString[TEXTSIZE] = { 0, };
       temp.toCharArray(convertedString, TEXTSIZE);
       WriteWithID(0, convertedString, TEXTSIZE);
+
+      // Regulate the node for next read
+      node->Regulate();
     }
   }
 

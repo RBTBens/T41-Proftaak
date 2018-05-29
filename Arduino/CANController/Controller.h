@@ -3,6 +3,8 @@
 
 #include "Sensor.h"
 
+#define PUMP_SINGLE_SUPPLY 50
+
 enum ControllerType{
   NOT_DEFINED,
   TEMPERATURE,
@@ -12,7 +14,7 @@ enum ControllerType{
   
 class Controller
 {
-  struct Recipe{
+  struct Recipe {
     int DesiredTemperature;
     int DesiredLight;
     int DesiredMoisture;

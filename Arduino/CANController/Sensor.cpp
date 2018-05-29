@@ -27,7 +27,23 @@ void Pump::On()
 
 void Pump::Off()
 {
+  endTime = 0;
   digitalWrite(PUMPPIN, LOW);
+}
+
+void Pump::Supply(float ml)
+{
+  float ms = (ml / rate) * 1000.0f;
+  On();
+  endTime = millis() + (unsigned long)ms;
+}
+
+void Pump::Regulate()
+{
+  if (endTime > 0 && millis() > endTime)
+  {
+    Off();
+  }
 }
 
 BME::BME(Adafruit_BME280 bme) : bme(bme)
@@ -50,12 +66,13 @@ float Soil::GetValue()
 {
   pinMode(SOILPIN, INPUT);
   digitalWrite(SOILPIN, HIGH);
-  float value = analogRead(SOILPIN);
 
-    if (value > 1000)
-    {
-      return -1;
-    }
+  float value = analogRead(SOILPIN);
+  if (value > 1000)
+  {
+    return -1;
+  }
+
   return constrain(map(value, 300, 600, 100, 0), 0, 100);
 }
 
