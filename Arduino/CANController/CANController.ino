@@ -1,4 +1,4 @@
- #include <CAN.h>
+#include <CAN.h>
 #include "Node.h"
 
 #define DEBUG true
@@ -25,7 +25,7 @@ void WriteWithID(int id , char message[], int messageSize)
   {
     CAN.beginPacket(id);
     CAN.write((byte)nodeId);
-    
+
     for (int i = 0; i < messageSize; i++)
     {
       CAN.write(message[i]);
@@ -62,15 +62,15 @@ void onReceive(int packetSize)  // received a packet
       Serial.print(" and length ");
       Serial.println(packetSize);
 
+      String message = "";
       // only print packet data for non-RTR packets
       while (CAN.available())
       {
-        Serial.print((char)CAN.read());
+        message += CAN.read();
       }
-      Serial.println();
+      node->SetDesiredValue(message.toFloat());
+      Serial.println(message);
     }
-
-    Serial.println();
   }
 }
 

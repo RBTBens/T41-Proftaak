@@ -3,32 +3,32 @@
 Node::Node()
 {
   controllerType = IdentifySensor();
-  
+
   switch (controllerType)
   {
     case NOT_DEFINED:
-    {
-      Serial.println("Unable to identify controller type! Defaulting to Pi");
-      break;
-    }
+      {
+        Serial.println("Unable to identify controller type! Defaulting to Pi");
+        break;
+      }
     case TEMPERATURE:
-    {
-      Serial.println("Created Temperature Controller");
-      controller = new TemperatureController(new BME(temp));
-      break;
-    }
+      {
+        Serial.println("Created Temperature Controller");
+        controller = new TemperatureController(new BME(temp));
+        break;
+      }
     case LIGHT:
-    {
-      Serial.println("Created Light Controller");
-      controller = new LightController(new TSL(lux));
-      break;
-    }
+      {
+        Serial.println("Created Light Controller");
+        controller = new LightController(new TSL(lux));
+        break;
+      }
     case SOIL:
-    {
-      Serial.println("Created Soil Controller");
-      controller = new SoilController(new Pump(), soil);
-      break;
-    }
+      {
+        Serial.println("Created Soil Controller");
+        controller = new SoilController(new Pump(), soil);
+        break;
+      }
   }
 }
 
@@ -39,7 +39,7 @@ ControllerType Node::IdentifySensor()
   bool soil = testSoil();
 
   testCo2();
-  
+
   if (light)
   {
     return LIGHT;
@@ -63,25 +63,25 @@ int Node::GetIdentifier()
   switch (controllerType)
   {
     case TEMPERATURE:
-    {
-      return 0b001;
-      break;
-    }
+      {
+        return 0b001;
+        break;
+      }
     case LIGHT:
-    {
-      return 0b010;
-      break;
-    }
+      {
+        return 0b010;
+        break;
+      }
     case SOIL:
-    {
-      return 0b011;
-      break;
-    }
+      {
+        return 0b011;
+        break;
+      }
     default:
-    {
-      return 0b00;
-      break;
-    }
+      {
+        return 0b00;
+        break;
+      }
   }
 }
 
@@ -111,7 +111,7 @@ bool Node::testTemp()
                    Adafruit_BME280::SAMPLING_X1,   // humidity
                    Adafruit_BME280::FILTER_OFF);
 
-    return true;
+  return true;
 }
 
 bool Node::testSoil()
@@ -120,19 +120,24 @@ bool Node::testSoil()
   {
     soil = new Soil();
   }
-  
+
   float value = soil->GetValue();
   return value >= 0 && value < 1000;
 }
 
 bool Node::testCo2()
 {
-   co2.setRange(MHZ19::PPM_2000); // 0-2000 PPM
+  co2.setRange(MHZ19::PPM_2000); // 0-2000 PPM
 }
 
 void Node::Regulate()
 {
   controller->Regulate();
+}
+
+void Node::SetDesiredValue(float value)
+{
+  controller->SetDesiredValue(value);
 }
 
 float Node::GetValue()

@@ -10,7 +10,7 @@ TemperatureController::TemperatureController(/*iHeater* heater,*/ iTemperature* 
 
 void TemperatureController::Regulate()
 {
-  desiredValue = 40; // set to the new desired value // 40 is for testing
+  //  desiredValue = 40; // set to the new desired value // 40 is for testing
   int setpoint = desiredValue; //write new desired value into this
   int feedback = temp->GetValue();
   for (int i = 0; i < 30; i++)
@@ -19,7 +19,7 @@ void TemperatureController::Regulate()
     // write output over PIN
     analogWrite(HEATERPIN, 255 - output);
   }
-  
+
   Serial.print("temp: ");
   Serial.println(feedback);
 }
@@ -87,11 +87,11 @@ LightController::LightController(/*iLED led,*/iLDR* ldr) : ldr(ldr)
 
 void LightController::Regulate()
 {
-  if (GetValue() > GetRecipe().DesiredLight)
+  if (GetValue() > desiredValue)
   {
     On();
   }
-  else if (GetValue() < GetRecipe().DesiredLight)
+  else if (GetValue() < desiredValue)
   {
     Off();
   }

@@ -1,4 +1,4 @@
-#ifndef NODE_H 
+#ifndef NODE_H
 #define NODE_H
 
 #include "Adafruit_TSL2561_U.h"
@@ -13,13 +13,14 @@ class Node
     Node(/*iCommunicationBus communication*/);
     int GetIdentifier();
     void Regulate();
+    void SetDesiredValue(float value);
     float GetValue();
     //Communication things
   private:
     Controller* controller;
     ControllerType controllerType;
     ControllerType IdentifySensor();
-    
+
     bool testTemp();
     bool testSoil();
     bool testLux();
