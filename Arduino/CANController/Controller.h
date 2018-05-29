@@ -3,7 +3,8 @@
 
 #include "Sensor.h"
 
-#define PUMP_SINGLE_SUPPLY 50
+#define PUMP_SINGLE_SUPPLY 10
+#define PUMP_DELAY 60000
 
 enum ControllerType{
   NOT_DEFINED,
@@ -21,7 +22,7 @@ class Controller
   };
   
   public:
-    virtual void Regulate()=0;
+    virtual void Regulate() = 0;
     virtual float GetValue() = 0;
     void SetRecipe(Recipe rec) { recipe = rec; }
     Recipe GetRecipe() { return recipe; }
@@ -58,6 +59,7 @@ class SoilController : public Controller
   void Off();
   iPump* pump;
   iSoil* soil;
+  unsigned long lastSupplied = 0;
   
 };
 class LightController : public Controller

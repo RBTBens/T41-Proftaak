@@ -31,16 +31,14 @@ void TemperatureController::Off()
   //led.Off();
 }
 
-SoilController::SoilController(iPump* pump, iSoil* soil): pump(pump)
+SoilController::SoilController(iPump* pump, iSoil* soil)
 {
   this->soil = soil;
- // this->pump = pump;
+  this->pump = pump;
 }
 
 void SoilController::Regulate()
 {
-  Serial.println("Soil::Regulate()");
-  
   // For tracking exact pumpee
   pump->Regulate();
 
@@ -61,7 +59,12 @@ float SoilController::GetValue()
 }
 void SoilController::On()
 {
-  pump->Supply(PUMP_SINGLE_SUPPLY);
+  unsigned long current = millis();
+  if (current - lastSupplied > PUMP_DELAY)
+  {
+    pump->Supply(PUMP_SINGLE_SUPPLY);
+    lastSupplied = current;
+  }
 }
 void SoilController::Off()
 {
