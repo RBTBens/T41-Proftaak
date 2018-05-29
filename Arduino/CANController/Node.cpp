@@ -34,28 +34,28 @@ Node::Node()
 
 ControllerType Node::IdentifySensor()
 {
-    bool light = testLux();
-    bool temperature = testTemp();
-    bool soil = testSoil();
+  bool light = testLux();
+  bool temperature = testTemp();
+  bool soil = testSoil();
 
-    testCo2();
-    
-    if (light)
-    {
-      return LIGHT;
-    }
-    else if (temperature)
-    {
-      return TEMPERATURE;
-    }
-    else if (soil)
-    {
-      return SOIL;
-    }
-    else
-    {
-      return NOT_DEFINED;
-    }
+  testCo2();
+  
+  if (light)
+  {
+    return LIGHT;
+  }
+  else if (temperature)
+  {
+    return TEMPERATURE;
+  }
+  else if (soil)
+  {
+    return SOIL;
+  }
+  else
+  {
+    return NOT_DEFINED;
+  }
 }
 
 int Node::GetIdentifier()
@@ -132,7 +132,6 @@ bool Node::testCo2()
 
 void Node::Regulate()
 {
-  Serial.println("Node::Regulate()");
   controller->Regulate();
 }
 

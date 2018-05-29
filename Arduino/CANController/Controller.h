@@ -4,7 +4,7 @@
 #include "Sensor.h"
 #include <FastPID.h>
 
-#define PUMP_SINGLE_SUPPLY 10
+#define PUMP_SINGLE_SUPPLY 5
 #define PUMP_DELAY 60000
 
 enum ControllerType{
@@ -28,7 +28,7 @@ class Controller
     void SetRecipe(Recipe rec) { recipe = rec; }
     Recipe GetRecipe() { return recipe; }
     ControllerType GetType() { return type; }
-    float desiredValue = 66;
+    float desiredValue = 80;
   private:
     Recipe recipe;
     ControllerType type;

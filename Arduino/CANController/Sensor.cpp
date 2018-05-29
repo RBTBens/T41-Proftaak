@@ -35,10 +35,9 @@ void Pump::Off()
 void Pump::Supply(float ml)
 {
   float ms = (ml / rate) * 1000.0f;
-  Serial.print("Supply ");
+  Serial.print("Supplying ");
   Serial.print(ml);
-  Serial.print(" ml - ms: ");
-  Serial.println(ms);
+  Serial.println(" ml");
   On();
   endTime = millis() + (unsigned long)ms;
 }

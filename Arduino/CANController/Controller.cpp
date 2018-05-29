@@ -1,22 +1,15 @@
 #include "Controller.h"
 
-
-
-
-
 TemperatureController::TemperatureController(/*iHeater* heater,*/ iTemperature* temp) : temp(temp)
 {
   float Kp = 1.1, Ki = 0.4, Kd = 0.1, Hz = 10;
   int output_bits = 8;
   bool output_signed = false;
   myPID = FastPID(Kp, Ki, Kd, Hz, output_bits, output_signed);
-
 }
 
 void TemperatureController::Regulate()
 {
-
-
   desiredValue = 40; // set to the new desired value // 40 is for testing
   int setpoint = desiredValue; //write new desired value into this
   int feedback = temp->GetValue();
@@ -24,10 +17,9 @@ void TemperatureController::Regulate()
   {
     uint8_t output = myPID.step(setpoint, feedback);
     // write output over PIN
-    
-   
     analogWrite(HEATERPIN, 255 - output);
   }
+  
   Serial.print("temp: ");
   Serial.println(feedback);
 }
@@ -36,10 +28,12 @@ float TemperatureController::GetValue()
 {
   return temp->GetValue();
 }
+
 void TemperatureController::On()
 {
   //led.On();
 }
+
 void TemperatureController::Off()
 {
   //led.Off();
