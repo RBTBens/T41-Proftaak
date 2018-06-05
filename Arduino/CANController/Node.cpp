@@ -38,8 +38,6 @@ ControllerType Node::IdentifySensor()
   bool temperature = testTemp();
   bool soil = testSoil();
 
-  testCo2();
-
   if (light)
   {
     return LIGHT;
@@ -123,11 +121,6 @@ bool Node::testSoil()
 
   float value = soil->GetValue();
   return value >= 0 && value < 1000;
-}
-
-bool Node::testCo2()
-{
-  co2.setRange(MHZ19::PPM_2000); // 0-2000 PPM
 }
 
 void Node::Regulate()

@@ -7,7 +7,6 @@
 
 #include "Adafruit_TSL2561_U.h"
 #include "Adafruit_BME280.h"
-#include "MHZ19.h"
 
 class iPump
 {
