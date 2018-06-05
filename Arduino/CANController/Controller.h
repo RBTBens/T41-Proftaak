@@ -55,6 +55,7 @@ class SoilController : public Controller
     SoilController(iPump* pump, iSoil* soil);
     void Regulate();
     float GetValue();
+    void CheckPump();
 
   private:
     void On();

@@ -143,3 +143,11 @@ int Node::GetDesiredValue()
   return controller->GetDesiredValue();
 }
 
+void Node::TimerCallback()
+{
+  if (controllerType == SOIL)
+  {
+    ((SoilController*)controller)->CheckPump();
+  }
+}
+

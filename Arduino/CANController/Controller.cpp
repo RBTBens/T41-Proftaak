@@ -44,15 +44,7 @@ SoilController::SoilController(iPump* pump, iSoil* soil)
 
 void SoilController::Regulate()
 {
-  // For tracking exact pumpee
-  pump->Regulate();
-
-  float value = GetValue();
-  if (value > desiredValue)
-  {
-    Off();
-  }
-  else if (value < desiredValue)
+  if (GetValue() < desiredValue)
   {
     On();
   }
@@ -62,6 +54,7 @@ float SoilController::GetValue()
 {
   return soil->GetValue();
 }
+
 void SoilController::On()
 {
   unsigned long current = millis();
@@ -76,6 +69,10 @@ void SoilController::Off()
   pump->Off();
 }
 
+void SoilController::CheckPump()
+{
+  pump->Check();
+}
 
 LightController::LightController(/*iLED led,*/iLDR* ldr) : ldr(ldr)
 {

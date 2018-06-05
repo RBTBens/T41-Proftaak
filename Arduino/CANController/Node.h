@@ -15,6 +15,7 @@ class Node
     void SetDesiredValue(float value);
     int GetDesiredValue();
     float GetValue();
+    void TimerCallback();
     //Communication things
   private:
     Controller* controller;

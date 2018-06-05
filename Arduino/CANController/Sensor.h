@@ -15,7 +15,7 @@ class iPump
   virtual void On() = 0;
   virtual void Off() = 0;
   virtual void Supply(float ml) = 0;
-  virtual void Regulate() = 0;
+  virtual void Check() = 0;
 };
 
 class Pump : public iPump
@@ -25,11 +25,12 @@ class Pump : public iPump
   void On() override;
   void Off() override;
   void Supply(float ml) override;
-  void Regulate() override;
+  void Check() override;
 
   private:
   const float rate = 1.22f; // amount of ml per second (ml/s)
-  unsigned long endTime = 0;
+  unsigned long endMillis = 0;
+  unsigned long passedMillis = 0;
 };
 
 class iHeater

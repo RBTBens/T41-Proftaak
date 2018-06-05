@@ -28,7 +28,6 @@ void Pump::On()
 
 void Pump::Off()
 {
-  endTime = 0;
   digitalWrite(PUMPPIN, LOW);
 }
 
@@ -38,15 +37,25 @@ void Pump::Supply(float ml)
   Serial.print("Supplying ");
   Serial.print(ml);
   Serial.println(" ml");
+
+  // Start interrupt timer on 1ms
+  OCR0A = 0xAF;
+  TIMSK0 |= _BV(OCIE0A);
+  
   On();
-  endTime = millis() + (unsigned long)ms;
+  passedMillis = 0;
+  endMillis = (unsigned long)ms;
 }
 
-void Pump::Regulate()
+void Pump::Check()
 {
-  if (endTime > 0 && millis() > endTime)
+  if (endMillis > 0 && ++passedMillis >= endMillis)
   {
     Off();
+    endMillis = 0;
+    
+    OCR0A = 0;
+    TIMSK0 &= ~_BV(OCIE0A);
   }
 }
 

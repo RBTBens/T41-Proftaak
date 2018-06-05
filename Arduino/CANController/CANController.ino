@@ -121,6 +121,9 @@ void loop()
       Serial.println(node->GetDesiredValue());
     }
   }
-
 }
 
+SIGNAL(TIMER0_COMPA_vect) 
+{
+  node->TimerCallback();
+}
