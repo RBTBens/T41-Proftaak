@@ -66,10 +66,9 @@ void onReceive(int packetSize)  // received a packet
       // only print packet data for non-RTR packets
       while (CAN.available())
       {
-        message += CAN.read();
+        message += (char) CAN.read();
       }
       node->SetDesiredValue(message.toFloat());
-      Serial.println(message);
     }
   }
 }

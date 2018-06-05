@@ -5,23 +5,24 @@
 #include "MHZ19.h"
 #include <SoftwareSerial.h>
 
-SoftwareSerial* serial;
+SoftwareSerial* _serial;
 
 MHZ19::MHZ19( int receivePin, int transmitPin )
 {
-    serial = new SoftwareSerial( receivePin, transmitPin );
+    _serial = new SoftwareSerial( receivePin, transmitPin );
+    _serial->begin(9600);
 }
 
 uint16_t MHZ19::getCO2()
 {
     /* Clear buffer */
-    while ( serial->available() > 0 )
+    while ( _serial->available() > 0 )
     {
-        serial->read();
+        _serial->read();
     }
     // Send command and read response
     write( CMD_READ );
-    serial->readBytes( response, 9 );
+    _serial->readBytes( response, 9 );
 
 //    Serial.println("MH-Z19 received:");
 //    for(int i = 0; i < 9; i++){
@@ -49,10 +50,10 @@ void MHZ19::setRange( MHZ19::sensor_range range )
     switch ( range )
     {
         case PPM_2000:
-            serial->write( range2000, 9 );
+            _serial->write( range2000, 9 );
             break;
         case PPM_5000:
-            serial->write( range5000, 9 );
+            _serial->write( range5000, 9 );
             break;
     }
 }
@@ -66,7 +67,7 @@ void MHZ19::write( byte command, byte value )
 {
     byte cmd[9] = {0xFF, 0x01, command, value, 0x00, 0x00, 0x00, 0x00, 0x00};
     cmd[8] = calculateChecksum( cmd );
-    serial->write( cmd, 9 );
+    _serial->write( cmd, 9 );
 
 //    Serial.println("MH-Z19 command send:");
 //    for(int i = 0; i < 9; i++){

@@ -53,7 +53,7 @@ void onReceive( int packetSize )  // received a packet
 void setup()
 {
   serial.begin(); // Initialised on 15200
-
+  co2.setRange(MHZ19::PPM_5000);
   // Setup the CAN bus
   CAN.begin( 500E3 );
   CAN.onReceive( onReceive );
@@ -69,7 +69,7 @@ void loop()
 
   if (millis() - lastUpdate >= UPDATE_DELAY) {
     lastUpdate = millis();
-    uint16_t result =   co2.getCO2();
+    uint16_t result = co2.getCO2();
     String temp = String(result);
     message_t message = {0};
     message.id = 0;
