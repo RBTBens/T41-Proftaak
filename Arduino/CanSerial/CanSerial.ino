@@ -1,5 +1,11 @@
 #include <CAN.h>
 #include "CanSerial.h"
+#include "MHZ19.h"
+
+#define PIN_RX 6
+#define PIN_TX 7
+
+#define UPDATE_DELAY 30000
 
 // declared Variables
 //  bioSphere node
@@ -9,52 +15,66 @@
 //            11 = Soil
 
 const int nodeId = 0;
+unsigned long lastUpdate = 0;
 
 CanSerial serial;
+MHZ19 co2(PIN_RX, PIN_TX);
 
 void WriteWithID( message_t message )
 {
-    if ( message.messageSize < 9 )
+  if ( message.messageSize < 9 )
+  {
+    CAN.beginPacket( message.id );
+    for ( int i = 0; i < message.messageSize; i++ )
     {
-        CAN.beginPacket( message.id );
-        for ( int i = 0; i < message.messageSize; i++ )
-        {
-            CAN.write( message.message[i] );
-        }
-        CAN.endPacket();
+      CAN.write( message.message[i] );
     }
+    CAN.endPacket();
+  }
 }
 
 void onReceive( int packetSize )  // received a packet
 {
-    if ( CAN.packetId() == nodeId )
+  if ( CAN.packetId() == nodeId )
+  {
+    message_t message = {0};
+    message.id = ( char ) CAN.read();
+    int counter = 0;
+    while ( CAN.available() )
     {
-        message_t message = {0};
-        int       counter = 0;
-        while ( CAN.available() )
-        {
-            message.message[counter] = ( char ) CAN.read();
-            counter++;
-        }
-        message.messageSize = counter;
-        serial.write( message );
+      message.message[counter] = ( char ) CAN.read();
+      counter++;
     }
+    message.messageSize = counter;
+    serial.write( message );
+  }
 }
 
 void setup()
 {
-    serial.begin(); // Initialised on 15200
+  serial.begin(); // Initialised on 15200
 
-    // Setup the CAN bus
-    CAN.begin( 500E3 );
-    CAN.onReceive( onReceive );
+  // Setup the CAN bus
+  CAN.begin( 500E3 );
+  CAN.onReceive( onReceive );
 }
 
 void loop()
 {
-    message_t receivedMessage = serial.read();
-    if ( receivedMessage.id > 0 )
-    {
-        WriteWithID( receivedMessage );
-    }
+  message_t receivedMessage = serial.read();
+  if ( receivedMessage.id > 0 )
+  {
+    WriteWithID( receivedMessage );
+  }
+
+  if (millis() - lastUpdate >= UPDATE_DELAY) {
+    lastUpdate = millis();
+    uint16_t result =   co2.getCO2();
+    String temp = String(result);
+    message_t message = {0};
+    message.id = 0;
+    temp.toCharArray(message.message, 8);
+    message.messageSize = temp.length();
+    serial.write( message );
+  }
 }
