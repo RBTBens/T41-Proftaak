@@ -19,9 +19,6 @@ void TemperatureController::Regulate()
     // write output over PIN
     analogWrite(HEATERPIN, 255 - output);
   }
-
-  Serial.print("temp: ");
-  Serial.println(feedback);
 }
 
 float TemperatureController::GetValue()

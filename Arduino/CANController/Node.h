@@ -14,6 +14,7 @@ class Node
     int GetIdentifier();
     void Regulate();
     void SetDesiredValue(float value);
+    int GetDesiredValue();
     float GetValue();
     //Communication things
   private:

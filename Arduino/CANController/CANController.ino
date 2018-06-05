@@ -3,7 +3,7 @@
 
 #define DEBUG true
 #define BIOSPHERE_ID 1
-#define INTERVAL 1000
+#define INTERVAL 30000
 
 #define TEXTSIZE 7
 #define DEFAULTID 0b00
@@ -69,6 +69,8 @@ void onReceive(int packetSize)  // received a packet
         message += (char) CAN.read();
       }
       node->SetDesiredValue(message.toFloat());
+      Serial.print("Received desired value: ");
+      Serial.println(message);
     }
   }
 }
@@ -115,6 +117,8 @@ void loop()
 
       // Regulate the node for next read
       node->Regulate();
+      Serial.print("My current desired value is: ");
+      Serial.println(node->GetDesiredValue());
     }
   }
 

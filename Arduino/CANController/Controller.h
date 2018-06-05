@@ -25,6 +25,9 @@ class Controller
     void SetDesiredValue(float value) {
       desiredValue = value;
     }
+    int GetDesiredValue(){
+      return desiredValue;
+    }
     float desiredValue = 80;
   private:
     ControllerType type;

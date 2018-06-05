@@ -145,3 +145,8 @@ float Node::GetValue()
   return controller->GetValue();
 }
 
+int Node::GetDesiredValue()
+{
+  return controller->GetDesiredValue();
+}
+
