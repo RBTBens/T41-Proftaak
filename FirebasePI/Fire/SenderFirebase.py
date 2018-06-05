@@ -45,5 +45,4 @@ class SenderFirebase:
         except TypeError:
             pass
         res = self.fb.put('/Biosphere/' + str(ID), "CurrentValues", current)
-
         print(res)

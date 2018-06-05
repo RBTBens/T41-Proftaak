@@ -25,3 +25,7 @@ class ReceiverFirebase:
         except:
             pass
         return res
+
+    def get_schematics(self):
+        res = self.fb.get('/Schematics/', None)
+        return res

@@ -35,8 +35,15 @@ void WriteWithID( message_t message )
 
 void onReceive( int packetSize )  // received a packet
 {
+  Serial.println("eypik");
+  if (CAN.packetRtr()) {
+      Serial.println("OH BOY");
+      return;
+    }
   if ( CAN.packetId() == nodeId )
   {
+    
+    
     message_t message = {0};
     message.id = ( char ) CAN.read();
     int counter = 0;
