@@ -109,6 +109,18 @@ void loop()
     {
       // Get current value and post that
       float result = node->GetValue();
+
+      // Get desired value
+      float desired = node->GetDesiredValue();
+      Serial.print("My current desired value is: ");
+      Serial.println(desired);
+
+      // Set result to -1
+      if (desired < 0)
+      {
+        result = desired;
+      }
+      
       String temp = String(result);
       Serial.println(temp);
       char convertedString[TEXTSIZE] = { 0, };
@@ -117,8 +129,6 @@ void loop()
 
       // Regulate the node for next read
       node->Regulate();
-      Serial.print("My current desired value is: ");
-      Serial.println(node->GetDesiredValue());
     }
   }
 }

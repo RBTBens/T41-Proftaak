@@ -28,7 +28,7 @@ class Controller
     int GetDesiredValue(){
       return desiredValue;
     }
-    float desiredValue = 80;
+    float desiredValue = -1;
   private:
     ControllerType type;
 };
