@@ -2,10 +2,16 @@
 #define CONTROLLER_H
 
 #include "Sensor.h"
-#include <FastPID.h>
+#include <AutoPID.h>
 
 #define PUMP_SINGLE_SUPPLY 5
 #define PUMP_DELAY 60000
+
+#define TEMPERATURE_OUTPUT_MIN 0
+#define TEMPERATURE_OUTPUT_MAX 255
+#define TEMPERATURE_KP 1.0
+#define TEMPERATURE_KI 0.2
+#define TEMPERATURE_KD 0.3
 
 enum ControllerType {
   NOT_DEFINED,
@@ -41,12 +47,13 @@ class TemperatureController : public Controller
     float GetValue();
 
   private:
-    FastPID myPID;
+    AutoPID* pid;
+    double temperaturePID, setPoint, outputVal;
+    
     void On();
     void Off();
     iHeater* heater;
     iTemperature* temp;
-    int desiredValue;
 
 };
 class SoilController : public Controller

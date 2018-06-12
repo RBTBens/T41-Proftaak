@@ -4,13 +4,16 @@
 #define DEBUG true
 #define BIOSPHERE_ID 1
 #define INTERVAL 30000
+#define INTERVAL_TEMPERATURE 1000
 
 #define TEXTSIZE 7
-#define DEFAULTID 0b00
+#define DEFAULTID 0b000
+#define TEMPERATUREID 0b001
 
 Node* node;
 int nodeId = BIOSPHERE_ID << 2;
 unsigned long previousMillis;
+unsigned long previousTempMillis;
 
 // declared Variables
 //  bioSphere node
@@ -128,6 +131,16 @@ void loop()
       WriteWithID(0, convertedString, TEXTSIZE);
 
       // Regulate the node for next read
+      node->Regulate();
+    }
+  }
+
+  // Update more frequently for temperature sensor
+  if (node->GetIdentifier() == TEMPERATUREID)
+  {
+    if (currentMillis - previousTempMillis >= INTERVAL_TEMPERATURE)
+    {
+      previousTempMillis = currentMillis;
       node->Regulate();
     }
   }

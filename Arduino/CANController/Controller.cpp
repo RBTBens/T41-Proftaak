@@ -2,22 +2,29 @@
 
 TemperatureController::TemperatureController(/*iHeater* heater,*/ iTemperature* temp) : temp(temp)
 {
-  float Kp = 1.1, Ki = 0.4, Kd = 0.1, Hz = 10;
-  int output_bits = 8;
-  bool output_signed = false;
-  myPID = FastPID(Kp, Ki, Kd, Hz, output_bits, output_signed);
+  pid = new AutoPID(&temperaturePID, &setPoint, &outputVal, TEMPERATURE_OUTPUT_MIN, TEMPERATURE_OUTPUT_MAX, TEMPERATURE_KP, TEMPERATURE_KI, TEMPERATURE_KD);
+  pid->setBangBang(1);
+  pid->setTimeStep(1000);
 }
 
 void TemperatureController::Regulate()
 {
-  //  desiredValue = 40; // set to the new desired value // 40 is for testing
-  int setpoint = desiredValue; //write new desired value into this
-  int feedback = temp->GetValue();
-  for (int i = 0; i < 30; i++)
+  setPoint = GetDesiredValue();
+  temperaturePID = temp->GetValue();
+  
+  if (setPoint < 0)
   {
-    uint8_t output = myPID.step(setpoint, feedback);
-    // write output over PIN
-    analogWrite(HEATERPIN, 255 - output);
+    analogWrite(HEATERPIN, 0);
+  }
+  else
+  {
+    pid->run();
+    analogWrite(HEATERPIN, outputVal);
+    
+    Serial.print("Feedback: ");
+    Serial.print(temperaturePID);
+    Serial.print(" output: ");
+    Serial.println(outputVal);
   }
 }
 
