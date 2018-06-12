@@ -1,5 +1,6 @@
 from firebase import firebase
 from ReceiverFirebase import ReceiverFirebase
+from SchematicInfo import SchematicInfo as Schematic
 import json
 
 
@@ -14,35 +15,36 @@ class SenderFirebase:
     def post_unkown_schematic(self, ID, values):
         current = None
         try:
-            current = self.receiver.get(ID)["CurrentValues"]
+            current = self.receiver.get(ID)[Schematic.current]
         except:
-            current = {"CO2":1,"lux":1,"groundMoisture":1, "temperature":1}
-        temp = {"ActiveSchematic":1}
+            current = {Schematic.CO2:1,Schematic.lux:1,
+                       Schematic.ground:1, Schematic.temp:1}
+        temp = {Schematic.schematic:1}
         test = self.receiver.get(ID)
-        temp["ActiveSchematic"] = "bessen"
+        temp[Schematic.schematic] = Schematic.mainSchematic
         self.fb.put('/Biosphere/', str(ID), temp)
         try:
             current[values[0]] = values[1]
         except TypeError:
             pass
-        res = self.fb.put('/Biosphere/' + str(ID), "CurrentValues", current)
+        res = self.fb.put('/Biosphere/' + str(ID), Schematic.current, current)
 
     def post(self, ID, values):
         current = None
         try:
-            current = self.receiver.get(ID)["CurrentValues"]
+            current = self.receiver.get(ID)[Schematic.current]
         except:
-            current = {"CO2":1,"lux":1,"groundMoisture":1, "temperature":1}
-        temp = {"ActiveSchematic":1}
+            current = {Schematic.CO2:1,Schematic.lux:1,
+                       Schematic.ground:1, Schematic.temp:1}
+        temp = {Schematic.schematic:1}
         test = self.receiver.get(ID)
         try:
-            temp["ActiveSchematic"] = test["ActiveSchematic"]
+            temp[Schematic.schematic] = test[Schematic.schematic]
         except TypeError:
-            temp["ActiveSchematic"] = "bessen"
+            temp[Schematic.schematic] = Schematic.mainSchematic
         self.fb.put('/Biosphere/', str(ID), temp)
         try:
             current[values[0]] = values[1]
         except TypeError:
             pass
-        res = self.fb.put('/Biosphere/' + str(ID), "CurrentValues", current)
-        print(res)
+        res = self.fb.put('/Biosphere/' + str(ID), Schematic.current, current)

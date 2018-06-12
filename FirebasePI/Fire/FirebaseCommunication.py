@@ -1,6 +1,7 @@
 from ReceiverFirebase import ReceiverFirebase
 from SenderFirebase import SenderFirebase
 from SerialCommunication import CanSerial
+from SchematicInfo import SchematicInfo as Schematic
 import time
 
 
@@ -8,7 +9,7 @@ class FirebaseCommunication:
     bak = 1
     receiver = ReceiverFirebase()
     sender = SenderFirebase()
-    serial = CanSerial("/dev/ttyACM4")
+    serial = CanSerial("/dev/ttyACM0")
     currentValues = None
     currentSchematics = None
     desiredValuesSet = {}
@@ -16,12 +17,14 @@ class FirebaseCommunication:
     def __init__(self):
         self.currentValues = list(self.receiver.get_all())
         self.currentSchematics = self.receiver.get_schematics()
+        self.desiredValuesSet[1] = True
 
     def poll_schematic_update(self):
         while(1):
-            print("hallo")
+            print("Polling")
             temp = list(self.receiver.get_all())
             tempSchematics = self.receiver.get_schematics()
+            print(self.desiredValuesSet)
             for i in range(0, temp.__len__()):
                 if isinstance(temp[i], dict):
                     newValue = temp[i]
@@ -29,11 +32,11 @@ class FirebaseCommunication:
                         oldValue = self.currentValues[i]
                     except IndexError:
                         oldValue = {}
-
-                    if newValue["ActiveSchematic"] != oldValue["ActiveSchematic"] \
+                    if newValue[Schematic.schematic] != oldValue[Schematic.schematic] \
                             or tempSchematics != self.currentSchematics\
                             or (i in self.desiredValuesSet and self.desiredValuesSet[i] is not None):
-                        schematic = temp[i]["ActiveSchematic"]
+                        print("Ready to send.")
+                        schematic = temp[i][Schematic.schematic]
                         print(schematic)
                         schematicValues = self.receiver.get_schematic(schematic)
                         self.currentSchematics = tempSchematics
@@ -54,13 +57,13 @@ class FirebaseCommunication:
             try:
                 msg = self.serial.read()
                 if msg is not None:
-                    print("")
                     print("Received:")
                     print("ID: " + msg[0] + " Data: " + msg[1])
-                    print("")
                     if msg[1].__contains__("-1"):
-                        print("hallo")
+                        print("Schematic request")
+                        data = int(msg[0])
                         biosphereNumber = (data & 0b11111100) >> 2
+                        print(biosphereNumber)
                         self.desiredValuesSet[biosphereNumber] = True
                     else:
                         data = int(msg[0])
